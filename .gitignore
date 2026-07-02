@@ -1,0 +1,4 @@
+# Secrets — never commit API keys / secrets
+rzp-key.csv
+*.key
+.env

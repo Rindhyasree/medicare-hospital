@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Medicare Hospital</title>
+    <link rel="stylesheet" href="medicare.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>🏥 Medicare Hospital</h1>
+    <nav>
+        <a href="home.html">Home</a>
+        <a href="doctors.html">Doctors</a>
+        <a href="booking.html">Book Appointment</a>
+        <a href="payment.html">Payment</a>
+    </nav>
+</header>
+
+<section>
+    <h2>Appointment Payment</h2>
+
+    <form id="paymentForm">
+
+        <label>Patient Name</label>
+        <input type="text" id="patientName" placeholder="Enter Your Name" required>
+
+        <label>Email</label>
+        <input type="email" id="patientEmail" placeholder="Enter Email Address" required>
+
+        <label>Phone Number</label>
+        <input type="tel" id="patientPhone" placeholder="Enter Phone Number" required>
+
+        <label>Appointment Fee</label>
+        <input type="text" value="₹500" readonly>
+
+        <button type="submit">Pay ₹500 Securely</button>
+
+    </form>
+</section>
+
+<footer>
+    <p>&copy; 2026 Medicare Hospital | All Rights Reserved.</p>
+</footer>
+
+<script>
+    // Appointment fee in rupees. Razorpay works in paise, so multiply by 100.
+    const APPOINTMENT_FEE = 500;
+
+    // Prefill patient details passed from the booking form.
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("name"))  document.getElementById("patientName").value  = params.get("name");
+    if (params.get("email")) document.getElementById("patientEmail").value = params.get("email");
+    if (params.get("phone")) document.getElementById("patientPhone").value = params.get("phone");
+
+    document.getElementById("paymentForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        const name = document.getElementById("patientName").value;
+        const email = document.getElementById("patientEmail").value;
+        const phone = document.getElementById("patientPhone").value;
+
+        const options = {
+            // Razorpay test Key Id. The Key Secret must stay on a backend, never here.
+            key: "rzp_test_T6VW3zRMVdNyEO",
+            amount: APPOINTMENT_FEE * 100,
+            currency: "INR",
+            name: "Medicare Hospital",
+            description: "Appointment Fee",
+            handler: function (response) {
+                // Payment succeeded. response.razorpay_payment_id holds the id.
+                window.location.href = "success.html?payment_id=" + response.razorpay_payment_id;
+            },
+            prefill: {
+                name: name,
+                email: email,
+                contact: phone
+            },
+            theme: {
+                color: "#0a7d7d"
+            },
+            modal: {
+                ondismiss: function () {
+                    alert("Payment cancelled. Please try again to confirm your appointment.");
+                }
+            }
+        };
+
+        const rzp = new Razorpay(options);
+        rzp.on("payment.failed", function (response) {
+            alert("Payment failed: " + response.error.description);
+        });
+        rzp.open();
+    });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Confirmed</title>
+    <link rel="stylesheet" href="medicare.css">
+</head>
+<body>
+
+<header>
+    <h1>🏥 Medicare Hospital</h1>
+</header>
+
+<section style="text-align:center; padding:60px;">
+
+    <h2 style="color:green;">✅ Payment Successful!</h2>
+
+    <h3>Your Appointment is Confirmed</h3>
+
+    <br>
+
+    <p><strong>Appointment ID:</strong> MED2026001</p>
+    <p><strong>Hospital:</strong> Medicare Hospital</p>
+    <p><strong>Status:</strong> Confirmed</p>
+
+    <br>
+
+    <h3>Appointment Details</h3>
+
+    <p><strong>Doctor:</strong> Dr. John Smith</p>
+    <p><strong>Department:</strong> Cardiology</p>
+    <p><strong>Date:</strong> 15 July 2026</p>
+    <p><strong>Time:</strong> 10:30 AM</p>
+
+    <br>
+
+    <h3>Payment Details</h3>
+
+    <p><strong>Amount Paid:</strong> ₹500</p>
+    <p><strong>Payment ID:</strong> <span id="paymentId">—</span></p>
+    <p><strong>Payment Status:</strong> Success</p>
+
+    <br>
+
+    <button onclick="window.print()">🖨️ Print Receipt</button>
+
+    <br><br>
+
+    <a href="home.html" class="btn">🏠 Back to Home</a>
+
+</section>
+
+<script>
+    // Show the Razorpay payment id passed from the checkout redirect.
+    const paymentId = new URLSearchParams(window.location.search).get("payment_id");
+    if (paymentId) {
+        document.getElementById("paymentId").textContent = paymentId;
+    }
+</script>
+
+<footer>
+    <p>&copy; 2026 Medicare Hospital | All Rights Reserved.</p>
+</footer>
+
+</body>
+</html>
